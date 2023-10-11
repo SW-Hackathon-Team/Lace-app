@@ -1,10 +1,7 @@
 import 'dart:convert';
-import 'package:app/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:app/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cookie_jar/cookie_jar.dart';
+import 'package:app/login.dart';
 
 void main() {
   runApp(SignUpApp());
@@ -20,33 +17,33 @@ class SignUpApp extends StatelessWidget {
 }
 
 class SignUpPage extends StatefulWidget {
-  SignUpPage({Key? key}) : super(key: key);
-
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final String apiUrl = "";
+  final String apiUrl = "http://3.34.158.127:8080/api/v1/user/signup";
 
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
 
-  CookieJar cookieJar = CookieJar();
-
-  Future<void> _login(BuildContext context) async {
+  Future<void> signup(BuildContext context) async {
     String id = idController.text;
     String password = passwordController.text;
     String name = nameController.text;
     String age = ageController.text;
 
     Map<String, dynamic> requestData = {
-      'email': id,
+      'id': id,
       'password': password,
+      'name': name,  // 이름 필드 추가
+      'age': age,    // 나이 필드 추가
     };
     String jsonData = json.encode(requestData);
+
+    print(jsonData);
 
     try {
       final response = await http.post(
@@ -56,12 +53,17 @@ class _SignUpPageState extends State<SignUpPage> {
         },
         body: jsonData,
       );
-
-      if (response.statusCode == 200) {
-        // cookie stirng 문자열 안에 accessToken or refreshToken이 포함되어 있으면 추출
+      print(response);
+      print(response.statusCode);
+      if (response.statusCode == 201) {
+        print("회원가입 성공");
+        // 로그인 페이지로 이동
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => LoginApp(), // LoginPage 대신 실제 로그인 페이지로 이동하려는 페이지로 교체
+        ));
       }
     } catch(e) {
-      print('e : $e');
+      print('에러 :e : $e');
     }
 
 }
@@ -74,7 +76,20 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Column(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.all(120),
+                margin: EdgeInsets.all(100),
+              ),
+              Container(
+                child: Text(
+                  "회원가입",
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Color.fromRGBO(148, 67, 251, 1.0),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 30),
               ),
               SizedBox(
                 width: 300,
@@ -132,7 +147,6 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 width: 300,
                 child: TextField(
-                  obscureText: true,
                   controller: nameController,
                   decoration: const InputDecoration(
                     labelText: "이름을 입력하세요",
@@ -159,7 +173,6 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 width: 300,
                 child: TextField(
-                  obscureText: true,
                   controller: ageController,
                   decoration: const InputDecoration(
                     labelText: "나이를 입력하세요",
@@ -185,7 +198,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  _login(context);
+                  signup(context);
                 },
                 child: Text("로그인"),
                 style: ElevatedButton.styleFrom(

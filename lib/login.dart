@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'package:app/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cookie_jar/cookie_jar.dart';
+import 'package:app/utils/util.dart';
 
 void main() {
   runApp(LoginApp());
@@ -29,17 +27,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final String apiUrl = "";
+  final String apiUrl = "http://3.34.158.127:8080/api/v1/user/login";
 
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   String responseText = "";
-  String accToken = '';
-  String refToken = '';
-  String clientName = '';
-
-  CookieJar cookieJar = CookieJar();
 
   Future<void> _login(BuildContext context) async {
     String id = idController.text;
@@ -62,52 +55,22 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.statusCode == 200) {
         print("로그인 성공!");
-        print(response.headers);
-        print(response.headers['set-cookie']);
 
-        // 쿠키 추출 및 저장
-        String? setCookieHeader = response.headers['set-cookie'];
-        if (setCookieHeader != null) {
-          List<String> cookies = setCookieHeader.split(';');
-          for (String cookie in cookies) {
-            if (cookie.contains('accessToken')) {
-              final cookieParts = cookie.split('=');
-              final cookieName = cookieParts[0].trim();
-              final cookieValue = cookieParts[1].trim();
-              print(cookieValue);
-              print(cookieName);
-              await saveAccessToken(cookieValue);
-            } else if (cookie.contains('refreshToken')) {
-              final cookieParts = cookie.split('=');
-              final cookieName = cookieParts[0].trim();
-              final cookieValue = cookieParts[1].trim();
-              print(cookieValue);
-              print(cookieName);
-              await saveRefreshToken(cookieValue);
-            }
-            // cookie stirng 문자열 안에 accessToken or refreshToken이 포함되어 있으면 추출
-          }
-        }
+        final jsonResponse = json.decode(response.body);
+        final accessToken = jsonResponse['accessToken'];
+        final refreshToken = jsonResponse['refreshToken'];
 
-        setState(() {
-          responseText = "로그인 성공: ${response.body}";
-          final jsonResponse = json.decode(response.body);
-          // print(jsonResponse);
-          // final String accessToken = jsonResponse['accToken'];
-          // final String refreshToken = jsonResponse['refToken'];
-          final String name = jsonResponse['name'];
-          int userPoint = jsonResponse['point'];
-          // saveAccessToken(accessToken);
-          // saveRefreshToken(refreshToken);
-          saveClientName(name);
-          widget.initialLoggedInState = true;
-        });
+        // 액세스 토큰을 저장합니다.
+        saveAccessToken(accessToken);  // 액세스 토큰 저장 함수를 정의해야 합니다.
+        // 리플레쉬 토큰을 저장합니다
+        // saveRefreshToken(refreshToken);  // 리플레쉬 토큰 저장 함수를 정의해야 합니다.
+        widget.initialLoggedInState = true;
 
+        // 초기 로그인 상태를 설정하고 메인 앱으로 이동
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                MyApp(initialLoggedInState: widget.initialLoggedInState),
+            builder: (context) => MyApp(initialLoggedInState: widget.initialLoggedInState),
           ),
         );
       } else {
@@ -136,6 +99,19 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               Container(
                 margin: EdgeInsets.all(150),
+              ),
+              Container(
+                child: Text(
+                  "로그인",
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Color.fromRGBO(148, 67, 251, 1.0),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 20),
               ),
               SizedBox(
                 width: 300,
