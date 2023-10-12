@@ -35,6 +35,7 @@ dependencies:
   provider: ^5.0.0
   shared_preferences: ^2.0.8 # 원하는 버전을 선택하세요
   cookie_jar: ^2.0.0
+  flutter_screenutil: ^5.9.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -63,6 +64,9 @@ flutter:
 
   assets:
     - assets/logo.png
+    - assets/image1.png
+    - assets/diary.png
+    - assets/graph.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
