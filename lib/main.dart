@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app/chat.dart';
 import 'package:app/utils/util.dart';
 import 'package:app/diaryWrite.dart';
+import 'package:app/analyze.dart';
 
 const String accessTokenKey = 'accToken';
 const String refreshTokenKey = 'refToken';
@@ -33,7 +34,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     isLoggedIn = widget.initialLoggedInState;
-    loadSavedData();
+    loadSavedData(context);
   }
 
   @override
@@ -214,7 +215,7 @@ class _MyAppState extends State<MyApp> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DiaryApp(),
+                            builder: (context) => AnalyzeApp(),
                           ),
                         );
                       },
