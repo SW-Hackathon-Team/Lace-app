@@ -39,19 +39,24 @@ class _LoginPageState extends State<LoginPage> {
     String password = passwordController.text;
 
     Map<String, dynamic> requestData = {
-      'email': id,
+      'loginId': id,
       'password': password,
     };
     String jsonData = json.encode(requestData);
+    print(jsonData);
 
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
-        headers: {
+        headers: <String, String>{
           'Content-Type': 'application/json',
         },
-        body: jsonData,
+        body: json.encode(requestData),
       );
+
+      print(jsonData);
+      
+      print(response.body);
 
       if (response.statusCode == 200) {
         print("로그인 성공!");
@@ -63,7 +68,9 @@ class _LoginPageState extends State<LoginPage> {
         // 액세스 토큰을 저장합니다.
         saveAccessToken(accessToken);  // 액세스 토큰 저장 함수를 정의해야 합니다.
         // 리플레쉬 토큰을 저장합니다
-        // saveRefreshToken(refreshToken);  // 리플레쉬 토큰 저장 함수를 정의해야 합니다.
+        saveRefreshToken(refreshToken);  // 리플레쉬 토큰 저장 함수를 정의해야 합니다.
+
+
         widget.initialLoggedInState = true;
 
         // 초기 로그인 상태를 설정하고 메인 앱으로 이동
@@ -75,15 +82,10 @@ class _LoginPageState extends State<LoginPage> {
         );
       } else {
         setState(() {
-          if (response.statusCode == null) {
-            responseText = "로그인 실패: 응답 상태 코드 없음";
-          } else {
-            responseText = "로그인 실패: ${response.statusCode}";
-          }
+          responseText = "로그인 실패: ${response.statusCode}";
         });
       }
     } catch (e) {
-      print(e);
       setState(() {
         responseText = "오류 발생: $e";
       });
@@ -98,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.all(150),
+                margin: EdgeInsets.all(130),
               ),
               Container(
                 child: Text(
@@ -111,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 20),
+                margin: EdgeInsets.only(top: 30),
               ),
               SizedBox(
                 width: 300,

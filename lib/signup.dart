@@ -36,10 +36,10 @@ class _SignUpPageState extends State<SignUpPage> {
     String age = ageController.text;
 
     Map<String, dynamic> requestData = {
-      'id': id,
+      'loginId': id,
       'password': password,
-      'name': name,  // 이름 필드 추가
-      'age': age,    // 나이 필드 추가
+      'name': name,
+      'age': age,
     };
     String jsonData = json.encode(requestData);
 
