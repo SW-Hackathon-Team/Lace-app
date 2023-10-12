@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/widget/diaryHeader.dart';
 import 'package:app/utils/util.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(ChatApp());
@@ -37,30 +38,37 @@ class _ChatPageState extends State<ChatPage> {
     String jsonData = json.encode(requestData);
     print(jsonData);
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          "":'Barear $token'
-        },
-        body: json.encode(requestData),
-      );
+    String? token = prefs.getString(accessTokenKey);
 
-      print(jsonData);
+    if(token != null && token != "") {
+      try {
+        final response = await http.post(
+          Uri.parse(apiUrl),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode(requestData),
+        );
+        print(jsonData);
 
-      print(response.body);
+        print(response.body);
+        print(response.statusCode);
 
-      if (response.statusCode == 200) {
-        print("챗GPT 응답성공");
+        if (response.statusCode == 200) {
+          print("챗GPT 응답성공");
 
-        final jsonResponse = json.decode(response.body);
+          final jsonResponse = json.decode(response.body);
+          print(jsonResponse);
 
-        responseText = jsonResponse;
+          responseText = jsonResponse;
+        }
+      } catch(e) {
+        print(e);
+        responseText="$e";
       }
-    } catch(e) {
-      print(e);
     }
   }
 
@@ -80,16 +88,68 @@ class _ChatPageState extends State<ChatPage> {
                   height: 100,
                 ),
               ),
+
+
+
+              Expanded(
+                child: ListView(
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(right: 26, left: 26),
+                          height: 600,
+                          width: 1000,
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Text(questionController.text,
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 10),
+                              ),
+
+                              Container(
+                                child: Text(
+                                  responseText,
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+
+
+
+
+
+
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(top: 680, left: 20, right: 20),
-                    child: const SizedBox(
+                    margin: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 24),
+                    child: SizedBox(
                       width: 300,
                       child: TextField(
+                        // controller: questionController,
                         controller: questionController,
-                        obscureText: true,
                         decoration: InputDecoration(
                           labelText: 'Lace에게 고민을 말해주세요',
                           hintText: 'Lace에게 고민을 말해주세요',
@@ -110,12 +170,11 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                     ),
                   ),
-
                   Container(
-                    margin: EdgeInsets.only(top: 675, right: 20),
+                    margin: EdgeInsets.only(top: 10, right: 16, bottom: 24),
                     height: 55,
                     child: ElevatedButton(
-                      onPressed: () { 
+                      onPressed: () {
                         _chat(context);
                       },
                       child: Image.asset(

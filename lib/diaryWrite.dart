@@ -70,10 +70,10 @@ class _DiaryPageState extends State<DiaryPage> {
                 margin: EdgeInsets.only(top: 40),
               ),
 
-              const SizedBox(
+              SizedBox(
                 width: 300,
                 child: TextField(
-                  // controller: titleController,
+                  controller: titleController,
                   decoration: InputDecoration(
                     labelText: '제목을 입력해주세요',
                     hintText: '제목을 입력해주세요',
@@ -96,12 +96,12 @@ class _DiaryPageState extends State<DiaryPage> {
               Container(
                 margin: const EdgeInsets.all(10),
               ),
-              const SizedBox(
+              SizedBox(
                 width: 300,
                 child: TextField(
                   maxLines: 10,
                   // obscureText: true,
-                  // controller: contentController,
+                  controller: contentController,
                   decoration: InputDecoration(
                     labelText: '내용을 작성해주세요',
                     hintText: '내용을 작성해주세요',
