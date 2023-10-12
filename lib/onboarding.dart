@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:app/login.dart';
+import 'package:app/signup.dart';
 
 void main() {
   runApp(const Onboarding());
@@ -53,6 +55,12 @@ class _OnboardingState extends State<OnboardingPage> {
               child: ElevatedButton(
                 onPressed: () {
                   // 버튼을 눌렀을 때 실행할 동작
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SignUpApp(),
+                    ),
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
@@ -78,6 +86,12 @@ class _OnboardingState extends State<OnboardingPage> {
               child: ElevatedButton(
                 onPressed: () {
                   // 버튼을 눌렀을 때 실행할 동작
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginApp(),
+                    ),
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(

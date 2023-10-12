@@ -36,45 +36,145 @@ class _DiaryPageState extends State<DiaryPage> {
             children: [
               diaryHeader(context),
               Container(
-                margin: EdgeInsets.only(top: 24),
-                child: Text(
-                  "작성된 일기가 없습니다"
-                ),
+                margin: EdgeInsets.only(top: 40),
               ),
-              Container(
-                width: 300,
-                height: 48,
-                margin: EdgeInsets.only(top: 24),
-                child: ElevatedButton(
-                  onPressed: () {
 
-                  },
-                  child: Text("작성하기"),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      const Color.fromRGBO(148, 67, 251, 1.0),
+              const SizedBox(
+                width: 300,
+                child: TextField(
+                  // controller: idController,
+                  decoration: InputDecoration(
+                    labelText: '제목을 입력해주세요',
+                    hintText: '제목을 입력해주세요',
+                    labelStyle: TextStyle(color: Colors.black),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(width: 1, color: Colors.black),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(width: 1, color: Colors.black12),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(),
                     ),
                   ),
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 48),
-                child: Text(
-                  "오늘의 감정일기",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 24
+                margin: const EdgeInsets.all(10),
+              ),
+              const SizedBox(
+                width: 300,
+                child: TextField(
+                  maxLines: 10,
+                  // obscureText: true,
+                  // controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: '내용을 작성해주세요',
+                    hintText: '내용을 작성해주세요',
+                    labelStyle: TextStyle(color: Colors.black),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(width: 1, color: Colors.black),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(width: 1, color: Colors.black12),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(),
+                    ),
                   ),
                 ),
               ),
+
               Container(
-                margin: EdgeInsets.only(top: 24, right: 160),
-                child: Text(
-                  "Lace의 일기 분석 결과",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: Color.fromRGBO(148, 67, 251, 1.0),
+                margin: const EdgeInsets.only(top:20,left: 20, right: 20),
+                  child: const Text(
+                    "오늘 감정을 선택해주세요.",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: (){
+                      print("1번 클릭");
+                    },
+                    child: Image.asset(
+                      "assets/face1.png",
+                      width: 32,
+                      height: 32,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: (){
+                      print("2번 클릭");
+                    },
+                    child: Image.asset(
+                      "assets/face2.png",
+                      width: 32,
+                      height: 32,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: (){
+                      print("3번 클릭");
+                    },
+                    child: Image.asset(
+                      "assets/face3.png",
+                      width: 32,
+                      height: 32,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: (){
+                      print("4번 클릭");
+                    },
+                    child: Image.asset(
+                      "assets/face4.png",
+                      width: 32,
+                      height: 32,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: (){
+                      print("5번 클릭");
+                    },
+                    child: Image.asset(
+                      "assets/face5.png",
+                      width: 32,
+                      height: 32,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 30),
+              ),
+              Container(
+                width: 320,
+                height: 40,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      const Color.fromRGBO(148, 67, 251, 1.0),
+                    ),
+                  ),
+                  child: const Text(
+                    "완료",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               )
