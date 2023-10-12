@@ -22,15 +22,46 @@ class DiaryPage extends StatefulWidget {
 }
 
 class _DiaryPageState extends State<DiaryPage> {
-  final String apiUrl = 'http://3.34.158.127:8080/api/v1/gpt/analyze/$id';
+  final String apiUrl = 'http://3.34.158.127:8080/api/v1/diary';
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController contentController = TextEditingController();
+  String mood="";
 
+  String responseText = "";
 
+  Future<void> _write(BuildContext context) async {
+    String title = titleController.text;
+    String content = contentController.text;
 
-  static get id => null;
+    Map<String, dynamic> requestData = {
+      'title': title,
+      'content': content,
+      'mood': mood
+    };
+    String jsonData = json.encode(requestData);
+    print(jsonData);
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(requestData),
+      );
+
+      print(jsonData);
+
+      print(response.body);
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+      // TODO: implement build
+      return MaterialApp(
         home: Scaffold(
           body: Column(
             children: [
@@ -39,10 +70,10 @@ class _DiaryPageState extends State<DiaryPage> {
                 margin: EdgeInsets.only(top: 40),
               ),
 
-              const SizedBox(
+              SizedBox(
                 width: 300,
                 child: TextField(
-                  // controller: idController,
+                  controller: titleController,
                   decoration: InputDecoration(
                     labelText: '제목을 입력해주세요',
                     hintText: '제목을 입력해주세요',
@@ -65,12 +96,12 @@ class _DiaryPageState extends State<DiaryPage> {
               Container(
                 margin: const EdgeInsets.all(10),
               ),
-              const SizedBox(
+              SizedBox(
                 width: 300,
                 child: TextField(
                   maxLines: 10,
                   // obscureText: true,
-                  // controller: passwordController,
+                  controller: contentController,
                   decoration: InputDecoration(
                     labelText: '내용을 작성해주세요',
                     hintText: '내용을 작성해주세요',
@@ -93,13 +124,13 @@ class _DiaryPageState extends State<DiaryPage> {
 
               Container(
                 margin: const EdgeInsets.only(top:20,left: 20, right: 20),
-                  child: const Text(
-                    "오늘 감정을 선택해주세요.",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
+                child: const Text(
+                  "오늘 감정을 선택해주세요.",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
+                ),
               ),
 
               Row(
@@ -108,6 +139,7 @@ class _DiaryPageState extends State<DiaryPage> {
                   InkWell(
                     onTap: (){
                       print("1번 클릭");
+                      mood="피곤함";
                     },
                     child: Image.asset(
                       "assets/face1.png",
@@ -118,6 +150,7 @@ class _DiaryPageState extends State<DiaryPage> {
                   InkWell(
                     onTap: (){
                       print("2번 클릭");
+                      mood="놀라움";
                     },
                     child: Image.asset(
                       "assets/face2.png",
@@ -128,6 +161,7 @@ class _DiaryPageState extends State<DiaryPage> {
                   InkWell(
                     onTap: (){
                       print("3번 클릭");
+                      mood="기쁨";
                     },
                     child: Image.asset(
                       "assets/face3.png",
@@ -138,6 +172,7 @@ class _DiaryPageState extends State<DiaryPage> {
                   InkWell(
                     onTap: (){
                       print("4번 클릭");
+                      mood="슬픔";
                     },
                     child: Image.asset(
                       "assets/face4.png",
@@ -148,6 +183,7 @@ class _DiaryPageState extends State<DiaryPage> {
                   InkWell(
                     onTap: (){
                       print("5번 클릭");
+                      mood="화남";
                     },
                     child: Image.asset(
                       "assets/face5.png",
@@ -164,7 +200,9 @@ class _DiaryPageState extends State<DiaryPage> {
                 width: 320,
                 height: 40,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _write(context);
+                  },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
                       const Color.fromRGBO(148, 67, 251, 1.0),

@@ -40,7 +40,7 @@ Future<void> saveClientName(String name) async {
   }
 }
 
-Future<Map> loadSavedData() async {
+Future<Map> loadSavedData(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   String? accessToken = prefs.getString(accessTokenKey);
