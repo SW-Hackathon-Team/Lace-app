@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app/chat.dart';
 import 'package:app/utils/util.dart';
+import 'package:app/diaryWrite.dart';
 
 const String accessTokenKey = 'accToken';
 const String refreshTokenKey = 'refToken';
@@ -118,9 +119,9 @@ class _MyAppState extends State<MyApp> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () =>
+                            onPressed: ()
                             {
-                              FlutterDialog(context)
+                              FlutterDialog(context);
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
@@ -205,12 +206,17 @@ class _MyAppState extends State<MyApp> {
                   ),
                   Container(
                     width: 400,
-                    height: 36,
+                    height: 34,
                     margin: EdgeInsets.only(left: 16, right: 16),
                     child: ElevatedButton(
-                      onPressed: () =>
+                      onPressed: ()
                       {
-
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DiaryApp(),
+                          ),
+                        );
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(

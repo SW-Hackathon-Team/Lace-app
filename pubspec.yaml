@@ -67,6 +67,11 @@ flutter:
     - assets/image1.png
     - assets/diary.png
     - assets/graph.png
+    - assets/face1.png
+    - assets/face2.png
+    - assets/face3.png
+    - assets/face4.png
+    - assets/face5.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
