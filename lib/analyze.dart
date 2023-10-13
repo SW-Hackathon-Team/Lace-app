@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/widget/diaryHeader.dart';
+import 'package:app/diaryWrite.dart';
 
 void main() {
   runApp(AnalyzeApp());
@@ -22,9 +23,6 @@ class AnalyzePage extends StatefulWidget {
 }
 
 class _AnalyzePageState extends State<AnalyzePage> {
-  final String apiUrl = 'http://3.34.158.127:8080/api/v1/gpt/analyze/$id';
-
-  static get id => null;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,12 @@ class _AnalyzePageState extends State<AnalyzePage> {
               margin: EdgeInsets.only(top: 24),
               child: ElevatedButton(
                 onPressed: () {
-
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DiaryApp(),
+                    ),
+                  );
                 },
                 child: Text("작성하기"),
                 style: ButtonStyle(
